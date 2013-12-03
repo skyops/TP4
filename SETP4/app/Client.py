@@ -11,7 +11,7 @@ import time
 import xml.dom.minidom
 
 MAX_RECV = 1024 * 1024 *30 
- #test12121234567
+ #test1212123456789
 # http://www.binarytides.com/receive-full-data-with-the-recv-socket-function-in-python/
 def recv_timeout(the_socket,timeout=2):
     #make socket non blocking
