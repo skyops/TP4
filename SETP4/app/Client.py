@@ -92,7 +92,7 @@ class client:
     return reponseXML
 
   def transférerDonnéesMaps(self, longitude, latitude):
-      #Transmet notre position à google maps et affiche le reseau le plus près de l'utilisateur sur la carte
+      #Transmet notre position à google maps et affiche le réseau le plus près de l'utilisateur sur la carte
       
   def afficherWifiPlusProche(self, longitude, latitude):
       #On compare la longitude et latitude de l'utilisateur avec ceux dans le fichier contenant 
