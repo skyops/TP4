@@ -90,164 +90,36 @@ class client:
       reponseXML = recv_timeout(self.connexion, timeout)
  
     return reponseXML
+
+  def transférerDonnéesMaps(self, longitude, latitude):
+      #Transmet notre position à google maps et affiche le reseau le plus près de l'utilisateur sur la carte
+      
+  def afficherWifiPlusProche(self, longitude, latitude):
+      #On compare la longitude et latitude de l'utilisateur avec ceux dans le fichier contenant 
+      #les coordonées des réseaux et on affiche celui dont les coordonées sont les plus semblables à 
+      #ceux de lutilisateur
  
-  def existeDossier(self, dossier):
-    "Requête au serveur de l'existence d'un dossier"
+  def listeReseaux(self, fichier):
+      #permet de dresser la liste des différents reseaux disponibles dans la ville de Québec avec leur adresses
+      #en lisant le fichier texte contenant les données de la ville
+      
+      
+      
+  def Localiser(self):
+      #Récuppère la longitude et la latitude de l'utilisateur avec le gps du téléphone
+      longitude= ""
+      latitude = ""
+      
+      return longitude, latitude
  
-    requeteXML= "<questionListeDossiers>" + dossier + "</questionListeDossiers>"
+  
  
+  
  
-    # Envoyer la requête et Attendre la réponse.
-    reponseXML = self.envoyer_recevoir(requeteXML, 0)
- 
-    # Réponse par défaut.
-    reponseClient = False
- 
-    dom = xml.dom.minidom.parseString(reponseXML)
- 
-    # Traitement de <listeDossiers>
-    for node in dom.getElementsByTagName('listeDossiers'): 
-      reponseClient = True
- 
-    return reponseClient
- 
-  def listeDossier(self, dossier):
-    "Requête au serveur pour obtenir la liste des sous-dossiers d'un dossier"
- 
-    requeteXML= "<questionListeDossiers>" + dossier + "</questionListeDossiers>"
- 
- 
-    # Envoyer la requête et Attendre la réponse.
-    reponseXML = self.envoyer_recevoir(requeteXML, 0)
- 
-    # Réponse par défaut.
-    reponseClient = []
- 
-    dom = xml.dom.minidom.parseString(reponseXML)
- 
-    liste_dossiers = []
-    # Traitement de <listeDossiers>
-    for node in dom.getElementsByTagName('listeDossiers'): 
-      for node2 in node.getElementsByTagName('dossier'):
-        dossier = node2.firstChild.data
-        liste_dossiers += [dossier]
- 
-      reponseClient = liste_dossiers
- 
-    return reponseClient
- 
-  def existeFichier(self, fichier, dossier):
-    "Requête au serveur de l'existence d'un fichier"
- 
-    requeteXML= "<questionListeFichiers>" + dossier + "</questionListeFichiers>"
- 
- 
-    # Envoyer la requête et Attendre la réponse.
-    reponseXML = self.envoyer_recevoir(requeteXML, 0)
- 
-    # Réponse par défaut.
-    reponseClient = False
- 
-    dom = xml.dom.minidom.parseString(reponseXML)
- 
-    # Traitement de <listeFichiers>
-    for node in dom.getElementsByTagName('listeFichiers'):
-      for node2 in node.getElementsByTagName('fichier'):
-        fichier_trouve = node2.firstChild.data
-        if fichier_trouve.find(fichier) != -1:
-          reponseClient = True
- 
-    return reponseClient
- 
-  def listeFichiers(self, dossier):
-    "Requête au serveur pour obtenir la liste des fichiers d'un dossier"
- 
-    requeteXML= "<questionListeFichiers>" + dossier + "</questionListeFichiers>"
- 
- 
-    # Envoyer la requête et Attendre la réponse.
-    reponseXML = self.envoyer_recevoir(requeteXML, 0)
- 
-    # Réponse par défaut.
-    reponseClient = []
- 
-    liste_fichiers = []
- 
-    dom = xml.dom.minidom.parseString(reponseXML)
- 
-    # Traitement de <listeFichiers>
-    for node in dom.getElementsByTagName('listeFichiers'):
-      for node2 in node.getElementsByTagName('fichier'):
-        fichier = node2.firstChild.data
-        liste_fichiers += [ fichier ]
- 
-      reponseClient = liste_fichiers
- 
-    return reponseClient
- 
-  def creerDossier(self, dossier):
-    "Requête de création d'un fichier sur le serveur"
- 
-    requeteXML= "<creerDossier>" + dossier + "</creerDossier>"
- 
-    # Envoyer la requête et Attendre la réponse.
-    reponseXML = self.envoyer_recevoir(requeteXML, 0)
- 
-    # Réponse par défaut.
-    reponseClient = False
- 
-    dom = xml.dom.minidom.parseString(reponseXML)
- 
-    # Traitement de <listeDossiers>
-    for node in dom.getElementsByTagName('ok'): 
-      reponseClient = True
- 
-    return reponseClient
- 
-  def televerserFichier(self, nom, dossier):
-    "Requête de téléversement d'un fichier."
- 
-    contenu = ""
- 
-    # Réponse par défaut.
-    reponseClient = False
- 
-    fichier = dossier + nom
-    contenu = open(fichier).read()
-    m = hashlib.md5()
-    m.update(contenu)
-    sign_serveur = m.hexdigest()
- 
-    contenu_encode = base64.b32encode(contenu)
- 
-    fichier_stat = os.stat(fichier)
-    date_modif = fichier_stat.st_mtime 
- 
- 
-    requeteXML = "<televerserFichier>" + \
-                 "<nom>" + nom + "</nom>" + \
-                 "<dossier>" + dossier + "</dossier>" + \
-                 "<signature>" + sign_serveur + "</signature>" + \
-                 "<contenu>" + contenu_encode + "</contenu>" + \
-                 "<date>" + str(date_modif) + "</date>" + \
-                 "</televerserFichier>"
-    # Envoyer la requête et Attendre la réponse.
-    reponseXML = self.envoyer_recevoir(requeteXML)
- 
-    dom = xml.dom.minidom.parseString(reponseXML)
- 
-    # Traitement de <listeDossiers>
-    for node in dom.getElementsByTagName('ok'): 
-      reponseClient = True
- 
-    return reponseClient
- 
-  def telechargerFichier(self, nom, dossier):
+  def telechargerFichier(self,):
     "Requête de téléchargement d'un fichier."
  
     requeteXML = "<telechargerFichier>" + \
-                 "<nom>" + nom + "</nom>" + \
-                 "<dossier>" + dossier + "</dossier>" + \
                  "</telechargerFichier>"
  
     # Réponse par défaut.
@@ -300,76 +172,7 @@ class client:
  
     return reponseClient
  
-  def supprimerFichier(self, nom, dossier):
-    "Requête au serveur pour obtenir la liste des sous-dossiers d'un dossier"
- 
-    requeteXML= "<supprimerFichier>" + \
-                "<nom>" + nom + "</nom>" + \
-                "<dossier>" + dossier + "</dossier>" + \
-                "</supprimerFichier>"
- 
- 
-    # Envoyer la requête et Attendre la réponse.
-    reponseXML = self.envoyer_recevoir(requeteXML, 0)
- 
-    # Réponse par défaut.
-    reponseClient = False
- 
-    dom = xml.dom.minidom.parseString(reponseXML)
- 
-    # Traitement de <ok>
-    for node in dom.getElementsByTagName('ok'): 
-      reponseClient = True
- 
-    return reponseClient
- 
-  def supprimerDossier(self, dossier):
-    "Requête au serveur pour obtenir la liste des sous-dossiers d'un dossier"
- 
-    requeteXML= "<supprimerDossier>" + dossier + "</supprimerDossier>"
- 
- 
-    # Envoyer la requête et Attendre la réponse.
-    reponseXML = self.envoyer_recevoir(requeteXML, 0)
- 
-    # Réponse par défaut.
-    reponseClient = False
- 
-    dom = xml.dom.minidom.parseString(reponseXML)
- 
-    # Traitement de <ok>
-    for node in dom.getElementsByTagName('ok'): 
-      reponseClient = True
- 
-    return reponseClient
- 
-  def fichierRecent(self, nom, dossier):
-    "Requête de comparaison des fichiers client et serveur."
- 
-    fichier = dossier + nom
-    fichier_stat = os.stat(fichier)
-    date_modif = fichier_stat.st_mtime
- 
-    requeteXML = "<questionFichierRecent>" + \
-                 "<nom>" + nom + "</nom>" + \
-                 "<dossier>" + dossier + "</dossier>" + \
-                 "<date>" + str(date_modif) + "</date>" + \
-                 "</questionFichierRecent>"
- 
-    # Réponse par défaut.
-    reponseClient = False
- 
-    # Envoyer la requête et Attendre la réponse.
-    reponseXML = self.envoyer_recevoir(requeteXML, 0)
- 
-    dom = xml.dom.minidom.parseString(reponseXML)
- 
-    # Traitement
-    for node in dom.getElementsByTagName('oui'): 
-      reponseClient = True
- 
-    return reponseClient
- 
+
   def miseAjour(self, dossier):
     "Mise à jour de l'arborescence"
  
