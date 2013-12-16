@@ -22,7 +22,7 @@ from os.path import isdir
 #---------------------#
 class server:
     """
-        Classe représentant le serveur
+        Classe représentant le serveur test
     """
     #Réponse possible du serveur
     greetingTag = '<bonjourClient />'
