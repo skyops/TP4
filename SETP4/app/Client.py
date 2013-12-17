@@ -46,6 +46,7 @@ def recv_timeout(the_socket,timeout=2):
             pass
 
   #make socket blocking
+  
   the_socket.setblocking(1)
   
   #join all parts to make final string
