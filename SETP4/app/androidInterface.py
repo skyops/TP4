@@ -6,13 +6,13 @@ Created on 2013-10-28
 @author: Bob
 '''
 import android
-import Client
+import client
 import time
 import sys
 
 def inputCommand(droid):
-    title = 'Alert'
-    message = ('Voulez vous mettre a jour laborescence')
+    title = 'Free Wifi For Everyone!'
+    message = ('voulez vous afficher le reseau le plus près de vous?')
     droid.dialogCreateAlert(title, message)
     #droid.dialogCreateAlert(title, message)
     droid.dialogSetPositiveButtonText('Yes')
@@ -27,15 +27,15 @@ def inputCommand(droid):
 if __name__ == '__main__':
     droid = android.Android()
     #my_client = Client.client("162.209.100.18", 60017)
-    my_client = Client(android.Android().dialogGetInput('IP').result,android.Android().dialogGetInput('Port').result)
+    my_client = client(android.Android().dialogGetInput('IP').result,android.Android().dialogGetInput('Port').result)
     response = inputCommand(droid)
     
     if not 'which' in response or response['which'] != 'positive': 
         sys.exit()
     
     while True:
-        droid.dialogCreateSpinnerProgress('Mise a jour', 'Veuillez passienter')
+        droid.dialogCreateSpinnerProgress('Nous calculons votre position', 'Veuillez patienter')
         droid.dialogShow()
-        my_client.miseAjour(".")
+        my_client.Localiser()
         droid.dialogDismiss()
         time.sleep(300)
