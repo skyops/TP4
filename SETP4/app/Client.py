@@ -12,7 +12,7 @@ import xml.dom.minidom
 
 MAX_RECV = 1024 * 1024 *30 
  #test1212123456789
-# http://www.binarytides.com/receive-full-data-with-the-recv-socket-function-in-python/
+# http://www.binarytides.com/receive-full-data-with-the-recv-socket-function-in-python/dfgfg
 def recv_timeout(the_socket,timeout=2):
     #make socket non blocking
     the_socket.setblocking(0)
