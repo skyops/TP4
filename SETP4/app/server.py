@@ -26,7 +26,6 @@ class server:
         Classe représentant le serveur test
     """
     #Réponse possible du serveur
-    greetingTag = '<bonjourClient />'
     nameOfServer = '<nomServeur>Ubuntu Dropbox 1.0</nomServeur>'
     
     # Se donner un objet de la classe socket.
@@ -41,7 +40,7 @@ class server:
     # Constructeur
     def __init__(self, host, port):
         "Constructeur du serveur et attendre une connection"
-		self.miseAJour();
+                self.miseAJour();
         self.my_socket.bind((host, port))    
         
         # Passer en mode écoute.
@@ -50,13 +49,17 @@ class server:
         c, addr = self.my_socket.accept()
         self.connexion = c
         date_ville= ""
+  
+ #Si la date de modification des fichiers est plus grande que la date du dernier  téléchargement, le logiciel
+    #télécharge la nouvelle version et récupère cette date
      def updateFile(self):
-        dataFile = urllib2.urlopen("http://donnees.ville.quebec.qc.ca/Handler.ashx?id=29&f=XLS")
+  "Met à jour les données depuis le site gouvernemental du québec"
+        dataXLS = urllib2.urlopen("http://donnees.ville.quebec.qc.ca/Handler.ashx?id=29&f=XLS")
         
         fData = open('wifiData.xls','w')
-        fData.write(dataFile.read())
+        fData.write(dataXLS.read())
         fData.close()
-        
+        self.parseWifiData('wifiData')
         '''
         Le lien pour ce fichier source n'est pas encore déterminé
         updateFile = urllib2.urlopen("http://donnees.ville.quebec.qc.ca/donne_details.aspx?jdid=63")
@@ -67,10 +70,11 @@ class server:
         fUpdate.write(dataFile.read())
         fUpdate.close()
         '''  
-         
-    def parseWifiData():  
-        dataXLS = open('wifiData.xls', 'w')
-        workbook = xlrd.open_workbook('wifiData.xls')
+    
+ #Parse le fichier des données ouverte de la ville et en fait un fichier utilisable par l'application
+    def parseWifiData(file):  
+        ftxt = open(file + '.txt', 'w')
+        workbook = xlrd.open_workbook(file + '.xls')
         wifiSheet = workbook.sheet_by_name('WIFI')
         num_rows = wifiSheet.nrows - 1
         num_cells = wifiSheet.ncols - 1
@@ -79,23 +83,16 @@ class server:
         while curr_row < num_rows:
          curr_row += 1
          row = wifiSheet.row(curr_row)
-         print 'Row:', curr_row
          curr_cell = -1
          cell_type = wifiSheet.cell_type(curr_row, curr_cell)
          cell_value = wifiSheet.cell_value(curr_row, curr_cell)
-         dataXLS.write(
+         ftxt.write(
           wifiSheet.cell(curr_row, 1) + ',' +
           wifiSheet.cell_value(curr_row, 2)+',' +
           wifiSheet.cell_value(curr_row, 3)+',' +
           wifiSheet.cell_value(curr_row, 4)+':')
         
-        dataXLS.close()
-        
-    def bonjour(self):
-        "Traitement de <bonjourServeur/>"
-        
-        dom = parseString(self.greetingTag)
-        return dom.toxml()
+        ftxt.close()
     
     def nom(self):
         "Traitement de <questionNomServeur>"
@@ -108,8 +105,8 @@ class server:
      
         requeteXML = "<telechargerFichier>" + \
                      "</telechargerFichier>"
-		
-		# Si le transfert c'est bien éffectué
+                
+                # Si le transfert c'est bien éffectué
         validTransfert = False
         
         # Envoyer la requête et Attendre la réponse.
@@ -158,76 +155,61 @@ class server:
           os.utime(fichier,(date_acces,float(date_modif)))
      
         return reponseClient
-    
-    def miseAJour(self):
-        "Met à jour les données depuis le site gouvernemental du québec"
-        miseAJourValid = False
-        return miseAJourValid
-
-    def televerserfichier(self, folder, fileToAdd):
+ 
+ #Génére le xml pour l'envoi d'un fichier texte TODO: retourner xml avec le fichier wifiData.txt
+    def televerserfichier(self, fileName):
+ 
         "Traitement de <televerserfichier>"
-        
-        for dirname, dirnames, filenames in os.walk('.'):
+        dom = '<televerserfichier>'
+  '''
+        for dirname, dirnames, fileName in os.walk('.'):
             for subdirname in dirnames:
                 #print os.path.join(dirname, subdirname)
                 if (subdirname == folder):
                     pass#Créer un nouveau fichier selon fileToAdd
-            
-        dom = "<televerserfichier/>"
+  '''
+        dom += "<televerserfichier/>"
         return dom.toxml()
     
-    def Parse_File(self, File):
-		pass
-        #Parse le fichier des données ouverte de la ville et en fait un fichier utilisable par l'application
-        
-    def VerifierDonneesVille(self,date):
-        pass
-        #Si la date de modification des fichiers est plus grande que la date du dernier  téléchargement, le logiciel
-        #télécharge la nouvelle version et récupère cette date
-    
+ #Termine la connection
     def quitter(self):
         msg = "<ok/>"
         return msg.toxml()
+  
 #--------------------#
 #------#|Main|#------#
 #--------------------#
 if __name__ == '__main__':
     serv = server('', 50017)
-	
+        
     msgServer = ""
     while True:
         
         # On attend un message du client.
-        msgClient = serv.connexion.recv(serv.MAX_RECV)
+        msgClient = my_server.connexion.recv(my_server.MAX_RECV)
         
         try:
             dom = parseString(msgClient)
         except:
             print "XML invalide!"
-            serv.connexion.close()
-            break
-        
-        # Traitement de <bonjourServeur />
-        for node in dom.getElementsByTagName('bonjourServeur'):
-            if node.firstChild == None:
-                msgServer = serv.bonjour()
+            my_server.connexion.close()
+            breakà
+   
+        # Traitement de <update/>
+        for node in dom.getElementsByTagName('update'):
+   if node.firstChild == None:
+    my_server.updateFile()
+    msgServer = my_server.televerserfichier()
         
         # Traitement de <questionNomServeur/>
         for node in dom.getElementsByTagName('nomServeur'):
             if node.firstChild == None:
-                msgServer = serv.nom()
-
-        # Traitement de <televerserFichier/>
-        for node in dom.getElementsByTagName('televerserFichier'):
-            msgServer = serv.televerserfichier(node.firstChild.data)
+                msgServer = my_server.nom()
         
-		# Traitement de <VerifierDonneesVille/>
-        for node in dom.getElementsByTagName('VerifierDonneesVille'):
-            msgServer = serv.VerifierDonneesVille(node.firstChild.data)
-		
+                
         # Traitement de <quitter/>
         for node in dom.getElementsByTagName('quitter'):
-            msgServer = serv.quitter()
+            msgServer = my_server.quitter()
           
-        serv.connexion.send(msgServer)
+        my_server.connexion.send(msgServer)
         print "Envoi au client le xml : " + msgServer
