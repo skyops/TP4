@@ -48,10 +48,10 @@ def recv_timeout(the_socket,timeout=2):
 
   #make socket blocking
   
-  the_socket.setblocking(1)
+    the_socket.setblocking(1)
   
   #join all parts to make final string
-  return ''.join(total_data)
+    return ''.join(total_data)
  
 class client:
   """
@@ -93,19 +93,23 @@ class client:
  
     return reponseXML
 
-  def transférerDonnéesMaps(self, longitude, latitude):
+  def transfererDonneesMaps(self, longitude, latitude):
       #Transmet notre position à google maps et affiche le réseau le plus près de l'utilisateur sur la carte
+      
+      return nothing
       
   def afficherWifiPlusProche(self, longitude, latitude):
       #On compare la longitude et latitude de l'utilisateur avec ceux dans le fichier contenant 
       #les coordonées des réseaux et on affiche celui dont les coordonées sont les plus semblables à 
       #ceux de lutilisateur
+      
+      return nothing
  
   def listeReseaux(self, fichier):
       #permet de dresser la liste des différents reseaux disponibles dans la ville de Québec avec leur adresses
       #en lisant le fichier texte contenant les données de la ville
       
-      
+      return nothing
       
   def Localiser(self):
       #Récuppère la longitude et la latitude de l'utilisateur avec le gps du téléphone
