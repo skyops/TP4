@@ -105,7 +105,7 @@ class client:
       
       with open(fichier) as f:
           lines = f.read().splitlines()
-      
+      return lines
       
       
   def Localiser(self):
