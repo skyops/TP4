@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+  
+=======
 #!/usr/bin/python   
+>>>>>>> branch 'master' of ssh://git@github.com/skyops/TP4.git
 # -*- coding: iso-8859-1 -*-
 
 '''
