@@ -169,7 +169,11 @@ class server:
                     pass#Créer un nouveau fichier selon fileToAdd
   '''
         dom += "<televerserfichier/>"
-        return dom.toxml()
+  with open('wifiData.txt', mode='rb') as file: 
+   dom = file.read()
+   file.closed
+        return dom
+        
     
  #Termine la connection
     def quitter(self):
