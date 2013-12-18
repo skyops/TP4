@@ -12,6 +12,7 @@ import os
 import hashlib
 import shutil
 import base64
+import urllib2
 
 from xml.dom.minidom import parse, parseString
 from os import listdir
@@ -36,6 +37,7 @@ class server:
     
     MAX_RECV = 1024
     
+    
     # Constructeur
     def __init__(self, host, port):
         "Constructeur du serveur et attendre une connection"
@@ -48,6 +50,23 @@ class server:
         c, addr = self.my_socket.accept()
         self.connexion = c
         date_ville= ""
+     def updateFile(self):
+        dataFile = urllib2.urlopen("http://donnees.ville.quebec.qc.ca/Handler.ashx?id=29&f=XLS")
+        
+        fData = open('wifiData.xls','w')
+        fData.write(dataFile.read())
+        fData.close()
+        
+        '''
+        Le lien pour ce fichier source n'est pas encore déterminé
+        updateFile = urllib2.urlopen("http://donnees.ville.quebec.qc.ca/donne_details.aspx?jdid=63")
+        '''
+        
+        '''
+        fUpdate = open('update.xml','w')
+        fUpdate.write(dataFile.read())
+        fUpdate.close()
+        '''    
         
     def bonjour(self):
         "Traitement de <bonjourServeur/>"
