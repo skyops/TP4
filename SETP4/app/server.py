@@ -1,4 +1,4 @@
-#!/usr/bin/python   
+[21:14:42] roberge-champagne philippe: #!/usr/bin/python   
 # -*- coding: iso-8859-1 -*-
 
 '''
@@ -193,7 +193,7 @@ if __name__ == '__main__':
         except:
             print "XML invalide!"
             my_server.connexion.close()
-            breakà
+            break
    
         # Traitement de <update/>
         for node in dom.getElementsByTagName('update'):
