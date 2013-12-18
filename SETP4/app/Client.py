@@ -48,7 +48,11 @@ def recv_timeout(the_socket,timeout=2):
 
   #make socket blocking
   
+<<<<<<< HEAD
+the_socket.setblocking(1)
+=======
     the_socket.setblocking(1)
+>>>>>>> branch 'master' of ssh://git@github.com/skyops/TP4.git
   
   #join all parts to make final string
     return ''.join(total_data)
@@ -108,8 +112,13 @@ class client:
   def listeReseaux(self, fichier):
       #permet de dresser la liste des différents reseaux disponibles dans la ville de Québec avec leur adresses
       #en lisant le fichier texte contenant les données de la ville
+
+      with open(ficher) as f:
+        ListeReseaux = [line.strip() for line in f]
+        
+      return ListeReseaux  
       
-      return nothing
+
       
   def Localiser(self):
       #Récuppère la longitude et la latitude de l'utilisateur avec le gps du téléphone
