@@ -103,6 +103,9 @@ class client:
       #permet de dresser la liste des différents reseaux disponibles dans la ville de Québec avec leur adresses
       #en lisant le fichier texte contenant les données de la ville
       
+      with open(fichier) as f:
+          lines = f.read().splitlines()
+      
       
       
   def Localiser(self):
