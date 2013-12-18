@@ -7,6 +7,7 @@ import hashlib
 import base64
 import os
 import time
+import android
 
 import xml.dom.minidom
 
@@ -104,16 +105,29 @@ class client:
       #permet de dresser la liste des différents reseaux disponibles dans la ville de Québec avec leur adresses
       #en lisant le fichier texte contenant les données de la ville
       
-      with open(fichier) as f:
-          lines = f.read().splitlines()
-      return lines
       
       
   def Localiser(self):
       #Récuppère la longitude et la latitude de l'utilisateur avec le gps du téléphone
       longitude= ""
       latitude = ""
-      
+      droid = android.Android()
+ droid.startLocating()
+ time.sleep(15)
+ loc = droid.readLocation().result
+ if loc = {}:
+   loc = getLastKnownLocation().result
+ if loc != {}:
+   try:
+     n = loc['gps']
+   except KeyError:
+     n = loc['network'] 
+   la = n['latitude'] 
+   latitude = la;
+   lo = n['longitude']
+   longitude=lo;
+   address = droid.geocode(la, lo).result
+ droid.stopLocating()
       return longitude, latitude
  
   
