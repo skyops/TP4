@@ -1,4 +1,4 @@
-[21:14:42] roberge-champagne philippe: #!/usr/bin/python   
+#!/usr/bin/python   
 # -*- coding: iso-8859-1 -*-
 
 '''
@@ -12,6 +12,7 @@ import os
 import hashlib
 import shutil
 import base64
+import base32
 import urllib2
 import xlrd
 from xml.dom.minidom import parse, parseString
@@ -172,8 +173,8 @@ class server:
   with open('wifiData.txt', mode='rb') as file: 
    dom = file.read()
    file.closed
+  dom = base64.b32encode(dom)
         return dom
-        
     
  #Termine la connection
     def quitter(self):
