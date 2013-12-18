@@ -8,7 +8,7 @@ import base64
 import os
 import time
 import android
-from math import sin, cos, sqrt, atan2
+from math import sin, cos, sqrt, atan2, radians
 import xml.dom.minidom
 
 MAX_RECV = 1024 * 1024 *30 
@@ -135,6 +135,7 @@ class client:
       return longitude, latitude
  
   def showlocation(self):
+      ""
       Localiser()
       latitude=latitude
       longitude=longitude
@@ -148,10 +149,10 @@ nearest =""
 
 nearest_distance=""
 
-lat1 = latitude
-lon1 = longitude
-lat2 = lat_list
-lon2 = lon_list
+lat1 = radians(latitude)
+lon1 = radians(longitude)
+lat2 = radians(lat_list)
+lon2 = radians(lon_list)
 
 dlon = lon2 - lon1
 dlat = lat2 - lat1
