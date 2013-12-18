@@ -8,7 +8,7 @@ import base64
 import os
 import time
 import android
-
+from math import sin, cos, sqrt, atan2
 import xml.dom.minidom
 
 MAX_RECV = 1024 * 1024 *30 
@@ -48,11 +48,7 @@ def recv_timeout(the_socket,timeout=2):
 
   #make socket blocking
   
-<<<<<<< HEAD
-the_socket.setblocking(1)
-=======
     the_socket.setblocking(1)
->>>>>>> branch 'master' of ssh://git@github.com/skyops/TP4.git
   
   #join all parts to make final string
     return ''.join(total_data)
@@ -112,29 +108,24 @@ class client:
   def listeReseaux(self, fichier):
       #permet de dresser la liste des différents reseaux disponibles dans la ville de Québec avec leur adresses
       #en lisant le fichier texte contenant les données de la ville
-
-      with open(ficher) as f:
-        ListeReseaux = [line.strip() for line in f]
-        
-      return ListeReseaux  
       
-
+      return nothing
       
   def Localiser(self):
       #Récuppère la longitude et la latitude de l'utilisateur avec le gps du téléphone
       longitude= ""
       latitude = ""
       droid = android.Android()
- droid.startLocating()
- time.sleep(15)
- loc = droid.readLocation().result
- if loc = {}:
-   loc = getLastKnownLocation().result
- if loc != {}:
-   try:
-     n = loc['gps']
-   except KeyError:
-     n = loc['network'] 
+      droid.startLocating()
+      time.sleep(15)
+      loc = droid.readLocation().result
+      if loc = {}:
+         loc = getLastKnownLocation().result
+        if loc != {}:
+            try:
+                n = loc['gps']
+                except KeyError:
+                    n = loc['network'] 
    la = n['latitude'] 
    latitude = la;
    lo = n['longitude']
@@ -143,8 +134,36 @@ class client:
  droid.stopLocating()
       return longitude, latitude
  
-  
- 
+  def showlocation(self):
+      Localiser()
+      latitude=latitude
+      longitude=longitude
+      
+
+R = 6373.0
+
+current=""
+
+nearest =""
+
+nearest_distance=""
+
+lat1 = latitude
+lon1 = longitude
+lat2 = lat_list
+lon2 = lon_list
+
+dlon = lon2 - lon1
+dlat = lat2 - lat1
+a = (sin(dlat/2))**2 + cos(lat1) * cos(lat2) * (sin(dlon/2))**2
+c = 2 * atan2(sqrt(a), sqrt(1-a))
+distance = R * c
+
+if distance<nearest_distance
+    nearest=current
+    nearest_distance=distance
+    
+return current
   
  
   def telechargerFichier(self,):
