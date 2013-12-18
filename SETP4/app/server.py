@@ -13,7 +13,7 @@ import hashlib
 import shutil
 import base64
 import urllib2
-
+import xlrd
 from xml.dom.minidom import parse, parseString
 from os import listdir
 from os.path import isdir
@@ -66,7 +66,30 @@ class server:
         fUpdate = open('update.xml','w')
         fUpdate.write(dataFile.read())
         fUpdate.close()
-        '''    
+        '''  
+         
+    def parseWifiData():  
+        dataXLS = open('wifiData.xls', 'w')
+        workbook = xlrd.open_workbook('wifiData.xls')
+        wifiSheet = workbook.sheet_by_name('WIFI')
+        num_rows = wifiSheet.nrows - 1
+        num_cells = wifiSheet.ncols - 1
+        curr_row = -1
+        
+        while curr_row < num_rows:
+         curr_row += 1
+         row = wifiSheet.row(curr_row)
+         print 'Row:', curr_row
+         curr_cell = -1
+         cell_type = wifiSheet.cell_type(curr_row, curr_cell)
+         cell_value = wifiSheet.cell_value(curr_row, curr_cell)
+         dataXLS.write(
+          wifiSheet.cell(curr_row, 1) + ',' +
+          wifiSheet.cell_value(curr_row, 2)+',' +
+          wifiSheet.cell_value(curr_row, 3)+',' +
+          wifiSheet.cell_value(curr_row, 4)+':')
+        
+        dataXLS.close()
         
     def bonjour(self):
         "Traitement de <bonjourServeur/>"
